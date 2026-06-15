@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024" role="img" aria-label="Hiraku">
+  <title>Hiraku — 直角正方形 / square</title>
+  <rect x="0" y="0" width="1024" height="1024" fill="#E2342B"></rect>
+  <g fill="#FFFFFF">
+    <rect x="219" y="174" width="150" height="675"></rect>
+    <rect x="655" y="174" width="150" height="675"></rect>
+    <rect x="219" y="447" width="586" height="130"></rect>
+  </g>
+</svg>
