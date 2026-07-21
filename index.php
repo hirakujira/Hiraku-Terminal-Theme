@@ -6,8 +6,17 @@ if (!defined('ABSPATH')) {
 get_header();
 
 $is_front_posts = is_home() && !is_paged() && !is_search() && !is_archive();
+$is_okx_archive = is_category('okx');
 $post_count = hiraku_terminal_post_count();
 $site_description = get_bloginfo('description', 'display');
+$okx_category = hiraku_terminal_okx_category();
+$okx_url = $okx_category ? get_category_link($okx_category) : '';
+$okx_cover_url = hiraku_terminal_okx_cover_url();
+$okx_description = $okx_category ? wp_strip_all_tags(term_description($okx_category->term_id, 'category')) : '';
+
+if (!$okx_description) {
+	$okx_description = 'OKX 交易所的開戶、法幣出入金、OKX Card 回饋等實用教學與心得，集中在這裡。';
+}
 ?>
 
 <?php if ($is_front_posts) : ?>
@@ -18,6 +27,50 @@ $site_description = get_bloginfo('description', 'display');
 		<span>$ ls -lt</span>
 		<span class="status-muted"># <?php echo esc_html(number_format_i18n($post_count)); ?> 篇文章 · since 2010</span>
 	</div>
+	<?php if ($okx_category && !is_wp_error($okx_url)) : ?>
+		<section class="okx-promo wrap">
+			<a class="okx-promo-link" href="<?php echo esc_url($okx_url); ?>" aria-label="進入 OKX 專區">
+				<span class="okx-media okx-promo-media">
+					<?php if ($okx_cover_url) : ?>
+						<img src="<?php echo esc_url($okx_cover_url); ?>" alt="">
+					<?php else : ?>
+						<span class="okx-cover-fallback" aria-hidden="true">OKX</span>
+					<?php endif; ?>
+				</span>
+				<span class="okx-promo-copy">
+					<span class="okx-promo-meta">
+						<span class="okx-collection-label">專區 · COLLECTION</span>
+						<span class="okx-path">$ cd ~/okx/</span>
+					</span>
+					<span class="okx-promo-title">OKX 專區</span>
+					<span class="okx-promo-description">開戶、法幣出入金、OKX Card 回饋，相關文章一次看懂</span>
+				</span>
+				<span class="okx-promo-action">進入專區 <?php echo hiraku_terminal_icon('arrow-right', 16); ?></span>
+			</a>
+		</section>
+	<?php endif; ?>
+<?php elseif ($is_okx_archive) : ?>
+	<header class="okx-archive-header wrap">
+		<div class="okx-archive-card">
+			<div class="terminal-chrome">
+				<span class="chrome-dot"></span><span class="chrome-dot"></span><span class="chrome-dot"></span>
+				<span class="okx-terminal-path">~/okx</span>
+			</div>
+			<div class="okx-archive-copy">
+				<span class="okx-media okx-archive-media">
+					<?php if ($okx_cover_url) : ?>
+						<img src="<?php echo esc_url($okx_cover_url); ?>" alt="">
+					<?php else : ?>
+						<span class="okx-cover-fallback" aria-hidden="true">OKX</span>
+					<?php endif; ?>
+				</span>
+				<div>
+					<h1>OKX 專區</h1>
+					<p><?php echo esc_html($okx_description); ?></p>
+				</div>
+			</div>
+		</div>
+	</header>
 <?php else : ?>
 	<header class="archive-header">
 		<div class="breadcrumb"><span class="prompt-accent">~</span><span>/</span><span><?php echo is_search() ? 'search' : 'archive'; ?></span></div>
@@ -73,7 +126,7 @@ $site_description = get_bloginfo('description', 'display');
 
 	<section class="list-section wrap">
 		<div class="section-heading">
-			<h2><span class="prompt-accent">$</span> <?php echo $is_front_posts ? 'recent_posts/' : 'results/'; ?></h2>
+			<h2><span class="prompt-accent">$</span> <?php echo $is_front_posts ? 'recent_posts/' : ($is_okx_archive ? 'ls ~/okx/' : 'results/'); ?></h2>
 			<span class="section-rule"></span>
 		</div>
 		<div class="post-list">
@@ -98,6 +151,11 @@ $site_description = get_bloginfo('description', 'display');
 			));
 			?>
 		</nav>
+		<?php if ($is_okx_archive) : ?>
+			<div class="okx-back-home">
+				<a href="<?php echo esc_url(home_url('/')); ?>">← 回首頁</a>
+			</div>
+		<?php endif; ?>
 	</section>
 <?php else : ?>
 	<section class="page-shell">

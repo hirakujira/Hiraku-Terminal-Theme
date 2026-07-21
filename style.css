@@ -625,6 +625,212 @@ body.admin-bar .command-bar {
   color: var(--fg-4);
 }
 
+.okx-promo.wrap {
+  margin-top: 28px;
+}
+
+.okx-promo-link {
+  --okx-color: #f7a072;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  overflow: hidden;
+  padding: 18px 20px;
+  border: 1px solid rgba(94, 234, 212, .24);
+  border-radius: 14px;
+  background: linear-gradient(100deg, rgba(247, 160, 114, .09), rgba(94, 234, 212, .05) 60%, transparent);
+  color: inherit;
+  text-decoration: none;
+  transition: border-color 200ms var(--ease), box-shadow 200ms var(--ease), background 200ms var(--ease);
+}
+
+.okx-promo-link:hover {
+  border-color: rgba(94, 234, 212, .45);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, .4), 0 0 0 1px rgba(94, 234, 212, .2);
+}
+
+.okx-promo-link:focus-visible,
+.okx-back-home a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+
+.okx-media {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--okx-color) 35%, transparent);
+  background:
+    radial-gradient(120% 120% at 30% 0%, rgba(247, 160, 114, .28), transparent 55%),
+    linear-gradient(135deg, #17201d, #0c1614);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .45);
+}
+
+.okx-media::after {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  content: "";
+  pointer-events: none;
+  background: linear-gradient(to top, rgba(0, 0, 0, .24), transparent 55%);
+}
+
+.okx-media img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  filter: saturate(.9) brightness(.8) contrast(1.06);
+}
+
+.okx-cover-fallback {
+  color: var(--okx-color);
+  font-family: var(--font-mono);
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -.06em;
+}
+
+.okx-promo-media {
+  width: 104px;
+  height: 104px;
+  border-radius: 12px;
+}
+
+.okx-promo-copy {
+  min-width: 0;
+  flex: 1;
+}
+
+.okx-promo-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+  flex-wrap: wrap;
+}
+
+.okx-collection-label {
+  padding: 2px 9px;
+  border: 1px solid rgba(247, 160, 114, .35);
+  border-radius: 4px;
+  color: var(--okx-color);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: .03em;
+}
+
+.okx-path {
+  color: var(--fg-4);
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+}
+
+.okx-promo-title {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--fg-1);
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -.02em;
+  line-height: 1.2;
+}
+
+.okx-promo-description {
+  display: block;
+  overflow: hidden;
+  color: var(--fg-2);
+  font-size: 14px;
+  line-height: 1.55;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.okx-promo-action,
+.okx-back-home a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 40px;
+  padding: 0 16px;
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+  background: rgba(94, 234, 212, .06);
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  transition: background 160ms var(--ease), border-color 160ms var(--ease), color 160ms var(--ease);
+}
+
+.okx-promo-link:hover .okx-promo-action,
+.okx-back-home a:hover {
+  background: rgba(94, 234, 212, .1);
+}
+
+.okx-archive-header.wrap {
+  margin-top: 40px;
+}
+
+.okx-archive-card {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--panel);
+  box-shadow: var(--shadow-lg);
+}
+
+.okx-terminal-path {
+  margin-left: auto;
+  color: var(--fg-3);
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+}
+
+.okx-archive-copy {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 30px 34px 28px;
+}
+
+.okx-archive-media {
+  width: 72px;
+  height: 72px;
+  border-radius: 14px;
+}
+
+.okx-archive-copy h1 {
+  margin: 0 0 6px;
+  color: var(--fg-1);
+  font-size: clamp(26px, 3.4vw, 34px);
+  font-weight: 900;
+  line-height: 1.15;
+  letter-spacing: -.02em;
+}
+
+.okx-archive-copy p {
+  margin: 0;
+  color: var(--fg-2);
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.okx-back-home {
+  margin-top: 24px;
+}
+
+.okx-back-home a {
+  border-color: var(--line);
+  background: transparent;
+  color: var(--fg-2);
+  text-decoration: none;
+}
+
 .wrap {
   max-width: var(--maxw);
   margin: 0 auto;
@@ -1797,6 +2003,14 @@ body.admin-bar .command-bar {
     display: none;
   }
 
+  .okx-promo-link {
+    gap: 16px;
+  }
+
+  .okx-archive-copy {
+    padding: 24px 28px;
+  }
+
   .featured-grid {
     grid-template-columns: 1fr;
     grid-template-areas:
@@ -1918,6 +2132,80 @@ body.admin-bar .command-bar {
   .status-line {
     padding-top: 16px;
     font-size: 12px;
+  }
+
+  .okx-promo.wrap {
+    margin-top: 24px;
+  }
+
+  .okx-promo-link {
+    gap: 14px;
+    padding: 14px;
+  }
+
+  .okx-promo-media {
+    width: 68px;
+    height: 68px;
+    border-radius: 10px;
+  }
+
+  .okx-cover-fallback {
+    font-size: 14px;
+  }
+
+  .okx-promo-meta {
+    margin-bottom: 4px;
+  }
+
+  .okx-path {
+    display: none;
+  }
+
+  .okx-promo-title {
+    margin-bottom: 2px;
+    font-size: 19px;
+  }
+
+  .okx-promo-description {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    white-space: normal;
+  }
+
+  .okx-promo-action {
+    width: 40px;
+    min-width: 40px;
+    min-height: 40px;
+    padding: 0;
+    font-size: 0;
+  }
+
+  .okx-promo-action svg {
+    width: 17px;
+    height: 17px;
+  }
+
+  .okx-archive-header.wrap {
+    margin-top: 32px;
+  }
+
+  .okx-archive-copy {
+    align-items: flex-start;
+    gap: 14px;
+    padding: 20px;
+  }
+
+  .okx-archive-media {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+  }
+
+  .okx-archive-copy p {
+    font-size: 14px;
+    line-height: 1.65;
   }
 
   .featured {

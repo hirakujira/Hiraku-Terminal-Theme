@@ -158,6 +158,17 @@ function hiraku_terminal_page_url($slug) {
 	return $page ? get_permalink($page) : home_url('/' . trim($slug, '/') . '/');
 }
 
+function hiraku_terminal_okx_category() {
+	return get_category_by_slug('okx');
+}
+
+function hiraku_terminal_okx_cover_url() {
+	$relative_path = '/assets/okx-cover.webp';
+	$path = get_theme_file_path($relative_path);
+
+	return file_exists($path) ? get_theme_file_uri($relative_path) : '';
+}
+
 function hiraku_terminal_category_menu_order() {
 	return array(
 		'parents' => array(
@@ -192,6 +203,9 @@ function hiraku_terminal_category_menu_order() {
 				'life-experience',
 				'music-experience',
 				'game',
+			),
+			'crypto' => array(
+				'okx',
 			),
 		),
 	);
@@ -296,6 +310,14 @@ function hiraku_terminal_category_color($term = null) {
 		return '#5eead4';
 	}
 
+	$name = is_object($term) ? $term->name : (string) $term;
+	$slug = is_object($term) ? $term->slug : sanitize_title($name);
+	$haystack = strtolower($slug . ' ' . $name);
+
+	if ('okx' === $slug) {
+		return '#f7a072';
+	}
+
 	if (is_object($term) && !empty($term->parent)) {
 		$palette = array(
 			'#5eead4',
@@ -331,10 +353,6 @@ function hiraku_terminal_category_color($term = null) {
 			}
 		}
 	}
-
-	$name = is_object($term) ? $term->name : (string) $term;
-	$slug = is_object($term) ? $term->slug : sanitize_title($name);
-	$haystack = strtolower($slug . ' ' . $name);
 
 	if (str_contains($haystack, 'life') || str_contains($haystack, '生活')) {
 		return '#f6c177';
