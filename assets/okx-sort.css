@@ -1,0 +1,109 @@
+.hiraku-okx-sort-page {
+  max-width: 900px;
+}
+
+.hiraku-okx-sort-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 20px 0 12px;
+}
+
+.hiraku-okx-sort-actions .spinner {
+  float: none;
+  margin: 0;
+}
+
+.hiraku-okx-sort-status {
+  min-height: 20px;
+}
+
+.hiraku-okx-sort-list {
+  margin: 0;
+  border: 1px solid #c3c4c7;
+  background: #fff;
+}
+
+.hiraku-okx-sort-item {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr) auto auto auto;
+  align-items: center;
+  gap: 12px;
+  min-height: 52px;
+  margin: 0;
+  padding: 0 12px;
+  border-bottom: 1px solid #dcdcde;
+  cursor: grab;
+}
+
+.hiraku-okx-sort-item:last-child {
+  border-bottom: 0;
+}
+
+.hiraku-okx-sort-item:focus {
+  position: relative;
+  z-index: 1;
+  outline: 2px solid #2271b1;
+  outline-offset: -2px;
+}
+
+.hiraku-okx-sort-item.is-dragging {
+  opacity: .45;
+}
+
+.hiraku-okx-sort-handle {
+  color: #787c82;
+  font-size: 20px;
+  letter-spacing: -4px;
+  line-height: 1;
+}
+
+.hiraku-okx-sort-title {
+  overflow: hidden;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.hiraku-okx-sort-date {
+  color: #646970;
+  font-variant-numeric: tabular-nums;
+}
+
+.hiraku-okx-sort-edit {
+  white-space: nowrap;
+}
+
+.hiraku-okx-sort-move {
+  display: flex;
+  gap: 4px;
+}
+
+.hiraku-okx-sort-move button {
+  min-width: 28px;
+  min-height: 28px;
+  padding: 0;
+  border: 1px solid #8c8f94;
+  border-radius: 3px;
+  background: #f6f7f7;
+  color: #2c3338;
+  cursor: pointer;
+}
+
+.hiraku-okx-sort-move button:hover {
+  border-color: #2271b1;
+  color: #135e96;
+}
+
+@media (max-width: 600px) {
+  .hiraku-okx-sort-item {
+    grid-template-columns: 20px minmax(0, 1fr) auto;
+    gap: 8px;
+    padding: 8px;
+  }
+
+  .hiraku-okx-sort-date,
+  .hiraku-okx-sort-edit {
+    display: none;
+  }
+}
