@@ -63,7 +63,7 @@
   list.addEventListener('keydown', function (event) {
     var item = event.target.closest('[data-post-id]');
 
-    if (!item) {
+    if (!item || event.target.closest('[data-okx-sort-type]')) {
       return;
     }
 
@@ -99,6 +99,11 @@
     body.append('nonce', config.nonce);
     postIds.forEach(function (postId) {
       body.append('post_ids[]', postId);
+    });
+    Array.prototype.forEach.call(list.querySelectorAll('[data-post-id]'), function (item) {
+      var typeSelect = item.querySelector('[data-okx-sort-type]');
+
+      body.append('post_types[' + item.dataset.postId + ']', typeSelect ? typeSelect.value : '');
     });
 
     saveButton.disabled = true;

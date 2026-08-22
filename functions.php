@@ -162,6 +162,30 @@ function hiraku_terminal_okx_category() {
 	return get_category_by_slug('okx');
 }
 
+function hiraku_terminal_okx_article_types() {
+	return array(
+		''         => __('未設定', 'hiraku-terminal'),
+		'beginner' => __('新手入門', 'hiraku-terminal'),
+		'funding'  => __('出入金', 'hiraku-terminal'),
+		'trading'  => __('基本交易', 'hiraku-terminal'),
+		'rewards'  => __('專屬回饋', 'hiraku-terminal'),
+	);
+}
+
+function hiraku_terminal_okx_article_type($post_id) {
+	$type = get_post_meta($post_id, '_hiraku_terminal_okx_type', true);
+	$types = hiraku_terminal_okx_article_types();
+
+	return is_string($type) && array_key_exists($type, $types) ? $type : '';
+}
+
+function hiraku_terminal_okx_requested_article_type() {
+	$type = isset($_GET['okx_type']) ? sanitize_key(wp_unslash($_GET['okx_type'])) : '';
+	$types = hiraku_terminal_okx_article_types();
+
+	return $type && array_key_exists($type, $types) ? $type : '';
+}
+
 function hiraku_terminal_okx_cover_url() {
 	$relative_path = '/assets/okx-cover.webp';
 	$path = get_theme_file_path($relative_path);
@@ -239,6 +263,7 @@ function hiraku_terminal_render_okx_sort_page() {
 			),
 			'no_found_rows' => true,
 		));
+		$article_types = hiraku_terminal_okx_article_types();
 
 		if (!$posts->have_posts()) {
 			echo '<div class="notice notice-info"><p>' . esc_html__('目前沒有已發布的 OKX 文章。', 'hiraku-terminal') . '</p></div>';
@@ -257,6 +282,14 @@ function hiraku_terminal_render_okx_sort_page() {
 					<span class="hiraku-okx-sort-handle" aria-hidden="true">⋮⋮</span>
 					<span class="hiraku-okx-sort-title"><?php echo esc_html(get_the_title()); ?></span>
 					<span class="hiraku-okx-sort-date"><?php echo esc_html(get_the_date('Y/m/d')); ?></span>
+					<label class="hiraku-okx-sort-type">
+						<span class="screen-reader-text"><?php esc_html_e('文章類型', 'hiraku-terminal'); ?></span>
+						<select data-okx-sort-type aria-label="<?php esc_attr_e('文章類型', 'hiraku-terminal'); ?>">
+							<?php foreach ($article_types as $type => $label) : ?>
+								<option value="<?php echo esc_attr($type); ?>"<?php selected(hiraku_terminal_okx_article_type(get_the_ID()), $type); ?>><?php echo esc_html($label); ?></option>
+							<?php endforeach; ?>
+						</select>
+					</label>
 					<a class="hiraku-okx-sort-edit" href="<?php echo esc_url(get_edit_post_link()); ?>"><?php esc_html_e('編輯', 'hiraku-terminal'); ?></a>
 					<span class="hiraku-okx-sort-move">
 						<button type="button" data-okx-sort-move="up" aria-label="<?php esc_attr_e('上移文章', 'hiraku-terminal'); ?>">↑</button>
@@ -280,6 +313,7 @@ function hiraku_terminal_save_okx_order() {
 	$category = hiraku_terminal_okx_category();
 	$posted_ids = isset($_POST['post_ids']) ? (array) wp_unslash($_POST['post_ids']) : array();
 	$posted_ids = array_values(array_unique(array_filter(array_map('absint', $posted_ids))));
+	$posted_types = isset($_POST['post_types']) && is_array($_POST['post_types']) ? wp_unslash($_POST['post_types']) : array();
 
 	if (!$category || !$posted_ids) {
 		wp_send_json_error(array('message' => __('排序資料無效，請重新整理頁面後再試。', 'hiraku-terminal')), 400);
@@ -302,9 +336,33 @@ function hiraku_terminal_save_okx_order() {
 		wp_send_json_error(array('message' => __('文章列表已變更或包含非 OKX 文章，請重新整理後再試。', 'hiraku-terminal')), 400);
 	}
 
+	$article_types = hiraku_terminal_okx_article_types();
+	$types_by_post_id = array();
+
+	foreach ($posted_types as $raw_post_id => $raw_type) {
+		$post_id = absint($raw_post_id);
+
+		if (!$post_id || isset($types_by_post_id[$post_id]) || !is_string($raw_type) || !array_key_exists($raw_type, $article_types)) {
+			wp_send_json_error(array('message' => __('文章類型資料無效，請重新整理頁面後再試。', 'hiraku-terminal')), 400);
+		}
+
+		$types_by_post_id[$post_id] = $raw_type;
+	}
+
+	$type_post_ids = array_keys($types_by_post_id);
+	sort($type_post_ids, SORT_NUMERIC);
+
+	if ($requested_ids !== $type_post_ids) {
+		wp_send_json_error(array('message' => __('文章類型資料不完整，請重新整理頁面後再試。', 'hiraku-terminal')), 400);
+	}
+
 	$total = count($posted_ids);
 
 	foreach ($posted_ids as $index => $post_id) {
+		if (!current_user_can('edit_post', $post_id)) {
+			wp_send_json_error(array('message' => __('你沒有權限編輯其中一篇文章。', 'hiraku-terminal')), 403);
+		}
+
 		$result = wp_update_post(array(
 			'ID' => $post_id,
 			'menu_order' => $total - $index,
@@ -312,6 +370,12 @@ function hiraku_terminal_save_okx_order() {
 
 		if (is_wp_error($result)) {
 			wp_send_json_error(array('message' => __('無法儲存排序，請稍後再試。', 'hiraku-terminal')), 500);
+		}
+
+		if ('' === $types_by_post_id[$post_id]) {
+			delete_post_meta($post_id, '_hiraku_terminal_okx_type');
+		} else {
+			update_post_meta($post_id, '_hiraku_terminal_okx_type', $types_by_post_id[$post_id]);
 		}
 	}
 
@@ -324,10 +388,22 @@ function hiraku_terminal_order_okx_archive($query) {
 		return;
 	}
 
+	$type = hiraku_terminal_okx_requested_article_type();
+
 	$query->set('orderby', array(
 		'menu_order' => 'DESC',
 		'date' => 'DESC',
 	));
+	$query->set('posts_per_page', 10);
+
+	if ($type) {
+		$query->set('meta_query', array(
+			array(
+				'key' => '_hiraku_terminal_okx_type',
+				'value' => $type,
+			),
+		));
+	}
 }
 add_action('pre_get_posts', 'hiraku_terminal_order_okx_archive');
 
