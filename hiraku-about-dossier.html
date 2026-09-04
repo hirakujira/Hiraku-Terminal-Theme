@@ -1,0 +1,848 @@
+<!-- ===================================================================
+     GitHub 能力鑑定 — hiraku.dev /about/ 嵌入版
+     貼進 WordPress「自訂 HTML」區塊即可。所有樣式都收在 .hkd 之下，
+     顏色優先沿用主題的 CSS 變數（--bg / --accent / --line ...），
+     單獨開啟這個檔案時則使用內建的 fallback 值。
+     =================================================================== -->
+<style>
+  .hkd {
+    --hkd-bg: var(--bg, #07100e);
+    --hkd-panel: var(--panel, #0c1614);
+    --hkd-panel2: var(--panel-2, #0a1311);
+    --hkd-panel3: var(--panel-3, #101b18);
+    --hkd-line: var(--line, #16241f);
+    --hkd-line2: var(--line-strong, #244039);
+    --hkd-fg1: var(--fg-1, #e9edf2);
+    --hkd-fg2: var(--fg-2, #aab4c0);
+    --hkd-fg3: var(--fg-3, #6e7a89);
+    --hkd-fg4: var(--fg-4, #626b77);
+    --hkd-ac: var(--accent, #5eead4);
+    --hkd-ac2: var(--accent-2, #34d399);
+    --hkd-glow: var(--accent-glow, rgba(94, 234, 212, .2));
+    --hkd-warm: var(--danger, #ff8a4c);
+    --hkd-warm-soft: rgba(255, 138, 76, .14);
+    --hkd-mono: var(--font-mono, "JetBrains Mono", "SFMono-Regular", "Cascadia Code", ui-monospace, Menlo, Consolas, monospace);
+    --hkd-sans: var(--font-sans, "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, -apple-system, sans-serif);
+    color-scheme: dark;
+    container-type: inline-size;
+    background: var(--hkd-bg);
+    color: var(--hkd-fg1);
+    font-family: var(--hkd-sans);
+    font-size: 15px;
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+    padding: 2px 0 4px;
+  }
+
+  .hkd * {
+    box-sizing: border-box
+  }
+
+  .hkd h2,
+  .hkd h3,
+  .hkd h4 {
+    margin: 0;
+    font-family: var(--hkd-sans);
+    color: var(--hkd-fg1);
+    line-height: 1.4;
+    text-wrap: balance
+  }
+
+  .hkd p {
+    margin: 0;
+    color: var(--hkd-fg2)
+  }
+
+  .hkd b,
+  .hkd strong {
+    color: var(--hkd-fg1);
+    font-weight: 700
+  }
+
+  .hkd-mono {
+    font-family: var(--hkd-mono);
+    font-variant-numeric: tabular-nums
+  }
+
+  /* ---- header ---- */
+  .hkd-head {
+    border-bottom: 1px solid var(--hkd-line2);
+    padding-bottom: 18px;
+    margin-bottom: 24px
+  }
+
+  .hkd-path {
+    font-family: var(--hkd-mono);
+    font-size: 12px;
+    color: var(--hkd-fg3);
+    letter-spacing: .04em
+  }
+
+  .hkd-path i {
+    color: var(--hkd-ac);
+    font-style: normal
+  }
+
+  .hkd-head h2 {
+    font-size: clamp(24px, 4.4vw, 32px);
+    font-weight: 900;
+    letter-spacing: .02em;
+    margin: 10px 0 10px
+  }
+
+  .hkd-head p {
+    font-size: 14.5px;
+    max-width: 62ch
+  }
+
+  /* ---- stat strip ---- */
+  .hkd-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(112px, 1fr));
+    gap: 1px;
+    background: var(--hkd-line);
+    border: 1px solid var(--hkd-line);
+    margin-bottom: 28px
+  }
+
+  .hkd-stat {
+    background: var(--hkd-panel);
+    padding: 13px 14px
+  }
+
+  .hkd-stat .v {
+    font-family: var(--hkd-mono);
+    font-size: 23px;
+    font-weight: 600;
+    color: var(--hkd-ac);
+    line-height: 1.2;
+    letter-spacing: -.01em
+  }
+
+  .hkd-stat .k {
+    font-size: 12px;
+    color: var(--hkd-fg3);
+    margin-top: 4px;
+    line-height: 1.5
+  }
+
+  /* ---- section head ---- */
+  .hkd-sh {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin: 0 0 16px
+  }
+
+  .hkd-sh h3 {
+    font-size: 17px;
+    font-weight: 700
+  }
+
+  .hkd-sh span {
+    font-family: var(--hkd-mono);
+    font-size: 11px;
+    color: var(--hkd-fg4);
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    margin-left: auto
+  }
+
+  /* ---- spectrum ---- */
+  .hkd-spec {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    align-items: start;
+    margin-bottom: 28px
+  }
+
+  .hkd-hex {
+    background: var(--hkd-panel);
+    border: 1px solid var(--hkd-line);
+    padding: 12px 12px 6px
+  }
+
+  .hkd-hex svg {
+    display: block;
+    width: 100%;
+    height: auto
+  }
+
+  .hkd-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 16px;
+    justify-content: center;
+    padding: 6px 0 8px;
+    font-family: var(--hkd-mono);
+    font-size: 11px;
+    color: var(--hkd-fg3)
+  }
+
+  .hkd-legend i {
+    display: inline-block;
+    width: 9px;
+    height: 9px;
+    margin-right: 6px;
+    vertical-align: 0
+  }
+
+  .hkd-axes {
+    display: grid;
+    gap: 1px;
+    background: var(--hkd-line);
+    border: 1px solid var(--hkd-line)
+  }
+
+  .hkd-ax {
+    background: var(--hkd-panel);
+    padding: 10px 14px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 3px 10px;
+    align-items: center
+  }
+
+  .hkd-ax .n {
+    font-size: 13.5px;
+    font-weight: 500
+  }
+
+  .hkd-ax .n em {
+    font-style: normal;
+    font-family: var(--hkd-mono);
+    font-size: 10.5px;
+    color: var(--hkd-fg4);
+    margin-left: 7px;
+    letter-spacing: .06em
+  }
+
+  .hkd-ax .v {
+    font-family: var(--hkd-mono);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--hkd-fg1)
+  }
+
+  .hkd-ax .b {
+    grid-column: 1/-1;
+    height: 6px;
+    background: var(--hkd-panel3);
+    position: relative;
+    margin-top: 2px
+  }
+
+  .hkd-ax .b i {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    background: var(--hkd-warm);
+    display: block
+  }
+
+  .hkd-ax.top .b i {
+    background: var(--hkd-ac)
+  }
+
+  .hkd-ax.top .v {
+    color: var(--hkd-ac)
+  }
+
+  .hkd-call {
+    background: var(--hkd-panel);
+    border: 1px solid var(--hkd-line);
+    border-left: 2px solid var(--hkd-ac);
+    padding: 16px 18px;
+    margin-bottom: 28px
+  }
+
+  .hkd-call .lab {
+    font-family: var(--hkd-mono);
+    font-size: 11px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--hkd-fg4)
+  }
+
+  .hkd-call .big {
+    font-size: 22px;
+    font-weight: 900;
+    color: var(--hkd-ac);
+    margin: 5px 0 8px;
+    letter-spacing: .04em
+  }
+
+  .hkd-call p {
+    font-size: 14px
+  }
+
+  /* ---- three readings ---- */
+  .hkd-cards {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-bottom: 28px
+  }
+
+  .hkd-card {
+    background: var(--hkd-panel);
+    border: 1px solid var(--hkd-line);
+    display: flex;
+    flex-direction: column
+  }
+
+  .hkd-card-h {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--hkd-line);
+    background: var(--hkd-panel2)
+  }
+
+  .hkd-card-h .src {
+    font-family: var(--hkd-mono);
+    font-size: 10.5px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--hkd-fg4)
+  }
+
+  .hkd-card-h .ttl {
+    font-size: 18px;
+    font-weight: 900;
+    color: var(--hkd-ac);
+    margin-top: 4px;
+    letter-spacing: .03em
+  }
+
+  .hkd-card-h .sub {
+    font-family: var(--hkd-mono);
+    font-size: 11px;
+    color: var(--hkd-fg3);
+    margin-top: 3px
+  }
+
+  .hkd-card-b {
+    padding: 15px 16px;
+    display: grid;
+    gap: 11px;
+    align-content: start;
+    flex: 1
+  }
+
+  .hkd-card-b p {
+    font-size: 13px;
+    line-height: 1.75
+  }
+
+  /* stand grades */
+  .hkd-grades {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--hkd-line);
+    border: 1px solid var(--hkd-line);
+    margin: 1px 0 3px
+  }
+
+  .hkd-gr {
+    background: var(--hkd-panel3);
+    padding: 9px 6px;
+    text-align: center
+  }
+
+  .hkd-gr .g {
+    font-family: var(--hkd-mono);
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 1;
+    color: var(--hkd-ac)
+  }
+
+  .hkd-gr.b .g {
+    color: var(--hkd-warm)
+  }
+
+  .hkd-gr .l {
+    font-size: 11px;
+    color: var(--hkd-fg3);
+    margin-top: 5px
+  }
+
+  /* pokemon stats */
+  .hkd-bst {
+    display: grid;
+    gap: 5px;
+    margin: 1px 0 3px
+  }
+
+  .hkd-bst-r {
+    display: grid;
+    grid-template-columns: 36px 30px 1fr;
+    gap: 8px;
+    align-items: center;
+    font-size: 12px
+  }
+
+  .hkd-bst-r .sn {
+    color: var(--hkd-fg2)
+  }
+
+  .hkd-bst-r .sv {
+    font-family: var(--hkd-mono);
+    font-size: 12px;
+    text-align: right;
+    color: var(--hkd-fg1);
+    font-variant-numeric: tabular-nums
+  }
+
+  .hkd-bst-r .sb {
+    height: 8px;
+    background: var(--hkd-panel3);
+    position: relative
+  }
+
+  .hkd-bst-r .sb i {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    display: block;
+    background: var(--hkd-ac)
+  }
+
+  .hkd-bst-r.lo .sb i {
+    background: var(--hkd-fg4)
+  }
+
+  .hkd-bst-r.hi .sv {
+    color: var(--hkd-ac);
+    font-weight: 600
+  }
+
+  .hkd-abil {
+    display: grid;
+    gap: 4px;
+    font-size: 12.5px;
+    color: var(--hkd-fg2)
+  }
+
+  .hkd-abil b {
+    color: var(--hkd-ac);
+    font-weight: 600;
+    font-size: 12.5px
+  }
+
+  /* ---- works table ---- */
+  .hkd-tw {
+    border: 1px solid var(--hkd-line);
+    background: var(--hkd-panel);
+    overflow-x: auto
+  }
+
+  .hkd-tw table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12.5px;
+    min-width: 430px
+  }
+
+  .hkd-tw th {
+    background: var(--hkd-panel2);
+    font-family: var(--hkd-mono);
+    font-size: 10.5px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--hkd-fg4);
+    font-weight: 500;
+    padding: 9px 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--hkd-line2);
+    white-space: nowrap
+  }
+
+  .hkd-tw td {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--hkd-line);
+    color: var(--hkd-fg2);
+    vertical-align: top
+  }
+
+  .hkd-tw tr:last-child td {
+    border-bottom: 0
+  }
+
+  .hkd-tw td.r {
+    font-family: var(--hkd-mono);
+    font-size: 12px;
+    color: var(--hkd-fg1);
+    white-space: nowrap
+  }
+
+  .hkd-tw td.n {
+    font-family: var(--hkd-mono);
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    color: var(--hkd-ac)
+  }
+
+  .hkd-tw td.y {
+    font-family: var(--hkd-mono);
+    font-size: 11.5px;
+    color: var(--hkd-fg3);
+    white-space: nowrap
+  }
+
+  .hkd-tw a {
+    color: var(--hkd-fg1);
+    text-decoration: none;
+    border-bottom: 1px solid var(--hkd-line2)
+  }
+
+  .hkd-tw a:hover {
+    color: var(--hkd-ac);
+    border-bottom-color: var(--hkd-ac)
+  }
+
+  .hkd-foot {
+    margin-top: 20px;
+    padding-top: 14px;
+    border-top: 1px solid var(--hkd-line);
+    font-family: var(--hkd-mono);
+    font-size: 11px;
+    color: var(--hkd-fg4);
+    line-height: 1.9
+  }
+
+  .hkd-foot a {
+    color: var(--hkd-fg3)
+  }
+
+  /* 依「置入的欄寬」而非視窗寬度決定版面，嵌進任何寬度的欄位都正確 */
+  @container (min-width:560px) {
+    .hkd-spec {
+      grid-template-columns: minmax(240px, 1fr) minmax(240px, 1.05fr)
+    }
+  }
+
+  @container (min-width:900px) {
+    .hkd-cards {
+      grid-template-columns: repeat(3, 1fr)
+    }
+  }
+
+  @media (max-width:420px) {
+    .hkd-grades {
+      grid-template-columns: repeat(2, 1fr)
+    }
+  }
+
+  @media (prefers-reduced-motion:reduce) {
+    .hkd * {
+      transition: none !important;
+      animation: none !important
+    }
+  }
+
+  .hkd :focus-visible {
+    outline: 2px solid var(--hkd-ac);
+    outline-offset: 2px
+  }
+</style>
+
+<div class="hkd">
+  <hr>
+  <br>
+  <div class="hkd-head">
+    <h2>GitHub 能力鑑定（中二版本）</h2>
+    <p>把 2010–2026 的公開 GitHub 資料丟進三套設定裡量一次：獵人的水見式、JOJO 的替身能力表、寶可夢的種族值。只採計真的推過 code 的專案。</p>
+  </div>
+
+  <div class="hkd-stats">
+    <div class="hkd-stat">
+      <div class="v">817</div>
+      <div class="k">公開 commit</div>
+    </div>
+    <div class="hkd-stat">
+      <div class="v">84</div>
+      <div class="k">參與過的公開專案</div>
+    </div>
+    <div class="hkd-stat">
+      <div class="v">1,260</div>
+      <div class="k">累積 star</div>
+    </div>
+    <div class="hkd-stat">
+      <div class="v">17</div>
+      <div class="k">主要程式語言</div>
+    </div>
+    <div class="hkd-stat">
+      <div class="v">12</div>
+      <div class="k">年不間斷</div>
+    </div>
+    <div class="hkd-stat">
+      <div class="v">42</div>
+      <div class="k">被合併的上游 PR</div>
+    </div>
+  </div>
+
+  <div class="hkd-sh">
+    <h3>能力光譜</h3><span>six axes</span>
+  </div>
+  <div class="hkd-spec">
+    <div class="hkd-hex">
+      <svg viewBox="-172 -168 344 336" role="img" aria-label="水見式六角圖：具現化系 92、變化系 90、特質系 88、強化系 86、操作系 80、放出系 66"
+        id="hkdHex"></svg>
+      <div class="hkd-legend">
+        <span><i style="background:var(--hkd-warm)"></i>實測值</span>
+        <span><i style="background:var(--hkd-ac)"></i>水見式理論值</span>
+      </div>
+    </div>
+    <div class="hkd-axes">
+      <div class="hkd-ax top"><span class="n">具現化・創造<em>CONJURATION</em></span><span class="v">92</span><span
+          class="b"><i style="width:92%"></i></span></div>
+      <div class="hkd-ax"><span class="n">變化・跨域<em>TRANSMUTATION</em></span><span class="v">90</span><span class="b"><i
+            style="width:90%"></i></span></div>
+      <div class="hkd-ax"><span class="n">特質・深度<em>SPECIALIZATION</em></span><span class="v">88</span><span class="b"><i
+            style="width:88%"></i></span></div>
+      <div class="hkd-ax"><span class="n">強化・續航<em>ENHANCEMENT</em></span><span class="v">86</span><span class="b"><i
+            style="width:86%"></i></span></div>
+      <div class="hkd-ax"><span class="n">操作・自動化<em>MANIPULATION</em></span><span class="v">80</span><span class="b"><i
+            style="width:80%"></i></span></div>
+      <div class="hkd-ax"><span class="n">放出・影響力<em>EMISSION</em></span><span class="v">66</span><span class="b"><i
+            style="width:66%"></i></span></div>
+    </div>
+  </div>
+
+  <div class="hkd-call">
+    <div class="lab">判定</div>
+    <div class="big">具現化系</div>
+    <p>擅長把腦子裡的東西做成能跑的實體，又快又雜；不擅長把它推得很遠。六軸的排序跟水見式對「具現化系本命」的預測完全吻合——本命最高、相鄰的變化系與特質系次之、對角的放出系墊底。</p>
+  </div>
+
+  <div class="hkd-sh">
+    <h3>三種讀法</h3><span>same data, three lenses</span>
+  </div>
+  <div class="hkd-cards">
+
+    <div class="hkd-card">
+      <div class="hkd-card-h">
+        <div class="src">獵人×獵人 · 水見式</div>
+        <div class="ttl">具現化系</div>
+        <div class="sub">最接近的角色：庫拉皮卡</div>
+      </div>
+      <div class="hkd-card-b">
+        <p>同樣是具現化系，同樣靠「制約與誓約」在限制裡換強度——在 iOS sandbox、越獄框架、沒有文件的私有 API 裡繼續做，力量正是從限制來的。</p>
+        <p>「絕對時間」的版本是 17 種語言同時開著，代價是把時間全燒進去。</p>
+        <p>連弱點都一樣：習慣一個人打完。</p>
+      </div>
+    </div>
+
+    <div class="hkd-card">
+      <div class="hkd-card-h">
+        <div class="src">寶可夢 · 全國圖鑑</div>
+        <div class="ttl">多邊獸Ｚ</div>
+        <div class="sub">#0474 · 一般 · 虛擬寶可夢</div>
+      </div>
+      <div class="hkd-card-b">
+        <div class="hkd-bst">
+          <div class="hkd-bst-r"><span class="sn">HP</span><span class="sv">85</span><span class="sb"><i
+                style="width:56.7%"></i></span></div>
+          <div class="hkd-bst-r"><span class="sn">攻擊</span><span class="sv">80</span><span class="sb"><i
+                style="width:53.3%"></i></span></div>
+          <div class="hkd-bst-r lo"><span class="sn">防禦</span><span class="sv">70</span><span class="sb"><i
+                style="width:46.7%"></i></span></div>
+          <div class="hkd-bst-r hi"><span class="sn">特攻</span><span class="sv">135</span><span class="sb"><i
+                style="width:90%"></i></span></div>
+          <div class="hkd-bst-r"><span class="sn">特防</span><span class="sv">75</span><span class="sb"><i
+                style="width:50%"></i></span></div>
+          <div class="hkd-bst-r"><span class="sn">速度</span><span class="sv">90</span><span class="sb"><i
+                style="width:60%"></i></span></div>
+        </div>
+        <p>特攻最高、防禦最低、速度第二高——跟上面六軸是同一個形狀。</p>
+        <div class="hkd-abil">
+          <div><b>適應力</b>　換到哪個語言，那個語言就是本系</div>
+          <div><b>下載</b>　進場先掃描對手弱點再決定用哪一招</div>
+          <div><b>分析</b>（隱藏）　後發，但更準</div>
+        </div>
+        <p>而且牠是靠「可疑修正檔」進化的：一隻被非官方程式改過的多邊獸Ⅱ。</p>
+      </div>
+    </div>
+
+    <div class="hkd-card">
+      <div class="hkd-card-h">
+        <div class="src">JOJO 的奇妙冒險 · 替身</div>
+        <div class="ttl">PENGUIN CAFE</div>
+        <div class="sub">ペンギン・カフェ</div>
+      </div>
+      <div class="hkd-card-b">
+        <div class="hkd-grades">
+          <div class="hkd-gr b">
+            <div class="g">B</div>
+            <div class="l">破壞力</div>
+          </div>
+          <div class="hkd-gr">
+            <div class="g">A</div>
+            <div class="l">速度</div>
+          </div>
+          <div class="hkd-gr">
+            <div class="g">A</div>
+            <div class="l">射程距離</div>
+          </div>
+          <div class="hkd-gr">
+            <div class="g">A</div>
+            <div class="l">持續力</div>
+          </div>
+          <div class="hkd-gr b">
+            <div class="g">B</div>
+            <div class="l">精密動作性</div>
+          </div>
+          <div class="hkd-gr">
+            <div class="g">A</div>
+            <div class="l">成長性</div>
+          </div>
+        </div>
+        <p>供應型替身。本體周圍會開一間店，有人點單「我想要一個能做 X 的東西」，數週之內成品就會端上桌。</p>
+        <p>不是一擊把敵人打倒的類型，是幾乎任何環境下都能變出恰好合用的道具的類型。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="hkd-sh">
+    <h3>代表作</h3><span>public repositories</span>
+  </div>
+  <div class="hkd-tw">
+    <table>
+      <thead>
+        <tr>
+          <th>專案</th>
+          <th style="text-align:right">Star</th>
+          <th>語言</th>
+          <th>年份</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="r"><a href="https://github.com/hirakujira/CPU-Identifier" rel="noopener">CPU-Identifier</a></td>
+          <td class="n">253</td>
+          <td>Objective-C</td>
+          <td class="y">2015–2026</td>
+        </tr>
+        <tr>
+          <td class="r"><a href="https://github.com/Cannathea/afc2d-arm64" rel="noopener">afc2d-arm64</a></td>
+          <td class="n">214</td>
+          <td>Objective-C++</td>
+          <td class="y">2018–2026</td>
+        </tr>
+        <tr>
+          <td class="r"><a href="https://github.com/hirakujira/CPU-Identifier-OSX" rel="noopener">CPU-Identifier-OSX</a>
+          </td>
+          <td class="n">116</td>
+          <td>Objective-C</td>
+          <td class="y">2015–2016</td>
+        </tr>
+        <tr>
+          <td class="r"><a href="https://github.com/zeuikli/line-cheater" rel="noopener">line-cheater</a></td>
+          <td class="n">111</td>
+          <td>Rust</td>
+          <td class="y">2026</td>
+        </tr>
+        <tr>
+          <td class="r"><a href="https://github.com/hirakujira/ChatGPT-Grammar-Check-PopClip-Extension"
+              rel="noopener">ChatGPT Grammar Check</a></td>
+          <td class="n">103</td>
+          <td>JavaScript</td>
+          <td class="y">2023–2025</td>
+        </tr>
+        <tr>
+          <td class="r"><a href="https://github.com/hirakujira/MAGI-System" rel="noopener">MAGI-System</a></td>
+          <td class="n">76</td>
+          <td>TypeScript</td>
+          <td class="y">2026</td>
+        </tr>
+        <tr>
+          <td class="r"><a href="https://github.com/hirakujira/ECG-Enabler" rel="noopener">ECG-Enabler</a></td>
+          <td class="n">62</td>
+          <td>Logos</td>
+          <td class="y">2019–2021</td>
+        </tr>
+        <tr>
+          <td class="r"><a href="https://github.com/Black-Magic-Lab/Surge" rel="noopener">Surge Modules</a></td>
+          <td class="n">59</td>
+          <td>JavaScript</td>
+          <td class="y">2021–2026</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="hkd-foot">
+    資料：GitHub 公開 API，2026-09-04 擷取。只計算實際有 commit 的專案，僅 fork 未貢獻者不列入。分析由 Opus 5 生成。<br>
+    寶可夢的屬性、特性與種族值取自神奇寶貝百科 <a href="https://wiki.52poke.com/zh-hant/%E5%A4%9A%E8%BE%B9%E5%85%BD%EF%BC%BA"
+      rel="noopener nofollow">52poke</a>，未經修改。角色設定為娛樂用途。
+  </div>
+
+</div>
+
+<script>
+  (function () {
+    var scope = document.querySelector('.hkd');
+    if (!scope) return;
+    var NS = 'http://www.w3.org/2000/svg';
+    function el(n, a) { var e = document.createElementNS(NS, n); for (var k in a) e.setAttribute(k, a[k]); return e; }
+
+    /* ---------- 水見式六角圖 ---------- */
+    var hex = scope.querySelector('#hkdHex');
+    if (hex) {
+      var R = 108;
+      var A = [
+        { n: '強化系', m: 86, t: 60, lx: 0, ly: -138, an: 'middle' },
+        { n: '變化系', m: 90, t: 80, lx: 116, ly: -64, an: 'start' },
+        { n: '具現化系', m: 92, t: 100, lx: 116, ly: 58, an: 'start' },
+        { n: '特質系', m: 88, t: 80, lx: 0, ly: 138, an: 'middle' },
+        { n: '操作系', m: 80, t: 60, lx: -116, ly: 58, an: 'end' },
+        { n: '放出系', m: 66, t: 40, lx: -116, ly: -64, an: 'end' }
+      ];
+      function pt(i, r) {
+        var a = (-90 + 60 * i) * Math.PI / 180;
+        return [+(Math.cos(a) * r).toFixed(2), +(Math.sin(a) * r).toFixed(2)];
+      }
+      function ring(r) { return A.map(function (_, i) { return pt(i, r).join(','); }).join(' '); }
+      var g = el('g', {});
+      [27, 54, 81, 108].forEach(function (r) {
+        g.appendChild(el('polygon', {
+          points: ring(r), fill: 'none',
+          stroke: r === 108 ? 'var(--hkd-line2)' : 'var(--hkd-line)', 'stroke-width': 1
+        }));
+      });
+      A.forEach(function (_, i) {
+        var p = pt(i, 108);
+        g.appendChild(el('line', { x1: 0, y1: 0, x2: p[0], y2: p[1], stroke: 'var(--hkd-line)', 'stroke-width': 1 }));
+      });
+      g.appendChild(el('polygon', {
+        points: A.map(function (a, i) { return pt(i, R * a.t / 100).join(','); }).join(' '),
+        fill: 'var(--hkd-glow)', stroke: 'var(--hkd-ac)', 'stroke-width': 1.5, 'stroke-dasharray': '5 4'
+      }));
+      g.appendChild(el('polygon', {
+        points: A.map(function (a, i) { return pt(i, R * a.m / 100).join(','); }).join(' '),
+        fill: 'rgba(255,138,76,.13)', stroke: 'var(--hkd-warm)', 'stroke-width': 2.5
+      }));
+      A.forEach(function (a, i) {
+        var p = pt(i, R * a.m / 100);
+        g.appendChild(el('circle', {
+          cx: p[0], cy: p[1], r: 3.6, fill: 'var(--hkd-warm)',
+          stroke: 'var(--hkd-panel)', 'stroke-width': 2
+        }));
+        var t1 = el('text', { x: a.lx, y: a.ly, 'text-anchor': a.an, fill: 'var(--hkd-fg1)', 'font-size': 12.5, 'font-weight': 600 });
+        t1.textContent = a.n; g.appendChild(t1);
+        var t2 = el('text', {
+          x: a.lx, y: a.ly + 16, 'text-anchor': a.an, fill: 'var(--hkd-warm)', 'font-size': 12.5,
+          'font-weight': 600, 'font-family': 'var(--hkd-mono)'
+        });
+        t2.textContent = a.m; g.appendChild(t2);
+      });
+      hex.appendChild(g);
+    }
+
+  })();
+</script>

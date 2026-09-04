@@ -29,6 +29,10 @@ $is_about = is_page('about');
 
 	<div class="entry-content">
 		<?php the_content(); ?>
+
+		<?php if ($is_about) : ?>
+			<?php require get_theme_file_path('/hiraku-about-dossier.html'); ?>
+		<?php endif; ?>
 	</div>
 
 	<?php if (comments_open() || get_comments_number()) : ?>
